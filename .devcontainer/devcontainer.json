@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>S.Y.S.T.E.M_O.V.E.R.R.I.D.E</title>
+    <style>
+        :root { --blood: #800000; --terminal: #00ff41; --warning: #ff0000; }
+        body, html { margin: 0; padding: 0; background: #000; color: var(--warning); font-family: 'Courier New', monospace; overflow: hidden; }
+
+        /* شاشة التشويش والوميض */
+        .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 2px, 3px 100%; z-index: 100; pointer-events: none; }
+
+        /* رسالة الترحيب المرعبة */
+        #welcome-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; }
+        .typing-text { font-size: 3rem; text-shadow: 0 0 20px var(--warning); border-right: 3px solid var(--warning); white-space: nowrap; overflow: hidden; width: 0; animation: typing 3s steps(30) forwards; }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+
+        /* نظام التشفير الجديد */
+        .encryption-unit { border: 1px solid var(--blood); padding: 20px; background: rgba(20, 0, 0, 0.8); margin: 20px; box-shadow: 0 0 15px var(--blood); }
+        input { background: #000; border: 1px solid var(--terminal); color: var(--terminal); padding: 10px; width: 80%; font-size: 1.2rem; }
+
+        /* نظام سحب البيانات الصامت (الرادار) */
+        .radar-box { position: fixed; top: 10px; right: 10px; width: 200px; height: 200px; border: 1px solid var(--terminal); border-radius: 50%; opacity: 0.5; overflow: hidden; }
+        .radar-line { width: 50%; height: 2px; background: var(--terminal); position: absolute; top: 50%; left: 50%; transform-origin: left; animation: rotate 4s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .glitch-face { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://i.imgur.com/vH9Z6hC.png') center/cover; opacity: 0; z-index: 50; pointer-events: none; }
+    </style>
+</head>
+<body onclick="activateAllSystems()">
+
+    <div id="welcome-screen">
+        <div class="typing-text">اهلا بكم في تهكير عزيز عالية...</div>
+    </div>
+
+    <div class="scanlines"></div>
+    <div class="glitch-face" id="horror-face"></div>
+
+    <div class="radar-box">
+        <div style="text-align: center; font-size: 10px; color: var(--terminal);">جاري تعقب المستخدم...</div>
+        <div class="radar-line"></div>
+    </div>
+
+    <div style="padding-top: 100px; text-align: center;">
+        <h1 style="font-size: 4rem; text-shadow: 5px 5px #000;">SYSTEM BREACH</h1>
+        
+        <div class="encryption-unit">
+            <h2>وحدة التشفير السوداء</h2>
+            <input type="text" id="enc-input" placeholder="اكتب كلمة سر ليتم سحقها..." oninput="corruptText(this.value)">
+            <div id="corrupted-output" style="margin-top: 20px; font-size: 2.5rem; color: #fff;"></div>
+        </div>
+
+        <div id="live-logs" style="color: var(--terminal); font-size: 0.8rem; margin-top: 50px;"></div>
+    </div>
+
+    <script>
+        // إخفاء شاشة الترحيب
+        setTimeout(() => {
+            document.getElementById('welcome-screen').style.display = 'none';
+        }, 4000);
+
+        function activateAllSystems() {
+            document.documentElement.requestFullscreen();
+            startAudioSurveillance();
+        }
+
+        // تشفير مخيف (يحول الكلمات لرموز شيطانية)
+        function corruptText(val) {
+            const darkSymbols = "☠✞⚰☥✙✚✛✜✝✞⟁∆ᗣ";
+            let result = "";
+            for(let i=0; i<val.length; i++) {
+                result += darkSymbols.charAt(Math.floor(Math.random() * darkSymbols.length));
+            }
+            document.getElementById('corrupted-output').innerText = result;
+            if(Math.random() > 0.8) triggerFlash();
+        }
+
+        function triggerFlash() {
+            const face = document.getElementById('horror-face');
+            face.style.opacity = "0.2";
+            setTimeout(() => face.style.opacity = "0", 100);
+        }
+
+        // نظام السجلات (Logs)
+        const scaryLogs = [
+            "جاري استخراج صور الكاميرا...",
+            "تحليل ملفات النظام 32...",
+            "تشفير صور المعرض...",
+            "ارسال بيانات الموقع لـ 'عزيز عالية'...",
+            "نحن نراك من الكاميرا الأمامية",
+            "لا تحاول إغلاق المتصفح"
+        ];
+
+        setInterval(() => {
+            const logBox = document.getElementById('live-logs');
+            const entry = document.createElement('div');
+            entry.innerText = `> ${scaryLogs[Math.floor(Math.random() * scaryLogs.length)]}`;
+            logBox.prepend(entry);
+            if(logBox.childNodes.length > 10) logBox.removeChild(logBox.lastChild);
+        }, 1500);
+
+        function startAudioSurveillance() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'brown'; 
+            osc.frequency.setValueAtTime(50, ctx.currentTime);
+            gain.gain.setValueAtTime(0.05, ctx.currentTime);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+        }
+    </script>
+</body>
+</html>
